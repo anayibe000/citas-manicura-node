@@ -53,3 +53,52 @@ h2 {
   color: #B00020;
   text-align: center;
 }
+.formulario,
+.confirmacion {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 32px;
+  box-shadow: 0 4px 20px rgba(185, 79, 107, 0.15);
+}
+
+.formulario form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: bold;
+  color: #B94F6B;
+}
+
+.formulario input,
+.formulario select {
+  padding: 10px;
+  border: 1px solid #E8A0B4;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+button {
+  background: #B94F6B;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 24px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.confirmacion {
+  text-align: center;
+}
