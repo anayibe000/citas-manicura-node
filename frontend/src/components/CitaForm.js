@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
-// Formulario para que la clienta agende su cita
-function CitaForm({ servicios, retiros, apiUrl, onCitaAgendada }) {
+// Formulario para agendar la cita.
+// Si recibe una clienta (recurrente), usa sus datos y no se los vuelve a pedir.
+function CitaForm({ servicios, retiros, apiUrl, onCitaAgendada, clienta }) {
   const [form, setForm] = useState({
-    nombre: "",
-    apellido: "",
-    telefono: "",
+    nombre: clienta ? clienta.nombre : "",
+    apellido: clienta ? clienta.apellido : "",
+    telefono: clienta ? clienta.telefono : "",
     id_servicio: "",
     id_retiro: "",
     fecha: "",
@@ -38,13 +39,11 @@ function CitaForm({ servicios, retiros, apiUrl, onCitaAgendada }) {
 
       const data = await res.json();
 
-      // Si el backend respondió con error (400, 404 o 409), mostrar su mensaje
       if (!res.ok) {
         setError(data.message || "No se pudo agendar la cita");
         return;
       }
 
-      // Si salió bien, pasar la cita a App para mostrar la confirmación
       onCitaAgendada(data.cita);
     } catch (err) {
       setError("No se pudo conectar con el servidor");
@@ -60,20 +59,25 @@ function CitaForm({ servicios, retiros, apiUrl, onCitaAgendada }) {
       <h2>Agenda tu cita</h2>
 
       <form onSubmit={handleSubmit}>
-        <label>
-          Nombre
-          <input name="nombre" value={form.nombre} onChange={handleChange} required />
-        </label>
+        {/* Los datos personales solo se piden a la clienta nueva */}
+        {!clienta && (
+          <>
+            <label>
+              Nombre
+              <input name="nombre" value={form.nombre} onChange={handleChange} required />
+            </label>
 
-        <label>
-          Apellido
-          <input name="apellido" value={form.apellido} onChange={handleChange} required />
-        </label>
+            <label>
+              Apellido
+              <input name="apellido" value={form.apellido} onChange={handleChange} required />
+            </label>
 
-        <label>
-          Teléfono
-          <input name="telefono" value={form.telefono} onChange={handleChange} maxLength="10" required />
-        </label>
+            <label>
+              Teléfono
+              <input name="telefono" value={form.telefono} onChange={handleChange} maxLength="10" required />
+            </label>
+          </>
+        )}
 
         <label>
           Servicio
