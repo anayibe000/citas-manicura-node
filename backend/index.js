@@ -18,3 +18,5 @@ app.listen(app.get('port'), () => {
 app.use('/api/citas', require('./routes/cita.routes'));
 
 app.use('/api/clientes', require('./routes/cliente.routes'));
+
+app.use('/api/admin', require('./routes/admin.routes'));
