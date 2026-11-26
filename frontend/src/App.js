@@ -6,6 +6,8 @@ import CitaForm from "./components/CitaForm";
 import Confirmacion from "./components/Confirmacion";
 import LoginAdmin from "./components/LoginAdmin";
 import PanelAdmin from "./components/PanelAdmin";
+import ServiciosAdmin from "./components/ServiciosAdmin";
+
 import "./App.css";
 
 const API_URL = "http://localhost:3000/api";
@@ -117,6 +119,7 @@ function App() {
             <>
               <p className="saludo">Hola, Andi 💅</p>
               <PanelAdmin apiUrl={API_URL} token={token} />
+                            <ServiciosAdmin apiUrl={API_URL} token={token} />
             </>
           )}
       

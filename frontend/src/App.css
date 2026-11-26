@@ -209,3 +209,12 @@ button:disabled {
   justify-content: center;
   margin-top: 16px;
 }
+.tabla-citas input {
+  font-family: inherit;
+  font-size: 1rem;
+  color: #B94F6B;
+  width: 100px;
+  padding: 4px;
+  border: 1px solid #E8A0B4;
+  border-radius: 6px;
+}
