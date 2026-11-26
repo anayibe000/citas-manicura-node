@@ -4,6 +4,8 @@ import LoginCliente from "./components/LoginCliente";
 import ServicioList from "./components/ServicioList";
 import CitaForm from "./components/CitaForm";
 import Confirmacion from "./components/Confirmacion";
+import LoginAdmin from "./components/LoginAdmin";
+import PanelAdmin from "./components/PanelAdmin";
 import "./App.css";
 
 const API_URL = "http://localhost:3000/api";
@@ -11,9 +13,10 @@ const API_URL = "http://localhost:3000/api";
 function App() {
   const [servicios, setServicios] = useState([]);
   const [error, setError] = useState("");
-  const [pantalla, setPantalla] = useState("inicio"); // inicio, nueva, login o recurrente
+  const [pantalla, setPantalla] = useState("inicio"); // inicio, nueva, login, recurrente, loginAdmin o admin
   const [clienta, setClienta] = useState(null);
   const [citaConfirmada, setCitaConfirmada] = useState(null);
+  const [token, setToken] = useState(null); // NUEVO: la "manilla" de la administradora
 
   // Al abrir la página, pedirle los servicios al backend
   useEffect(() => {
@@ -26,10 +29,11 @@ function App() {
   const serviciosNormales = servicios.filter((s) => s.es_retiro === 0);
   const retiros = servicios.filter((s) => s.es_retiro === 1);
 
-  // Volver al inicio y olvidar a la clienta
+  // Volver al inicio y olvidar a la clienta o a la administradora
   const volverAlInicio = () => {
     setClienta(null);
     setCitaConfirmada(null);
+    setToken(null); // NUEVO
     setPantalla("inicio");
   };
 
@@ -47,10 +51,18 @@ function App() {
       ) : (
         <>
           {pantalla === "inicio" && (
-            <Inicio
-              onNueva={() => setPantalla("nueva")}
-              onRecurrente={() => setPantalla("login")}
-            />
+            <>
+              <Inicio
+                onNueva={() => setPantalla("nueva")}
+                onRecurrente={() => setPantalla("login")}
+              />
+              {/* NUEVO: entrada para la administradora */}
+              <div className="acciones">
+                <button className="boton-secundario" onClick={() => setPantalla("loginAdmin")}>
+                  Ingreso administradora
+                </button>
+              </div>
+            </>
           )}
 
           {pantalla === "nueva" && (
@@ -89,10 +101,30 @@ function App() {
             </>
           )}
 
+          {/* NUEVO: login de la administradora */}
+          {pantalla === "loginAdmin" && (
+            <LoginAdmin
+              apiUrl={API_URL}
+              onLogin={(tokenRecibido) => {
+                setToken(tokenRecibido);
+                setPantalla("admin");
+              }}
+            />
+          )}
+
+          {/* NUEVO: panel de la administradora (por ahora solo el saludo) */}
+                    {pantalla === "admin" && token && (
+            <>
+              <p className="saludo">Hola, Andi 💅</p>
+              <PanelAdmin apiUrl={API_URL} token={token} />
+            </>
+          )}
+      
+
           {pantalla !== "inicio" && pantalla !== "login" && (
             <div className="acciones">
               <button className="boton-secundario" onClick={volverAlInicio}>
-                {clienta ? "Cerrar sesión" : "Volver al inicio"}
+                {clienta || token ? "Cerrar sesión" : "Volver al inicio"}
               </button>
             </div>
           )}
